@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 Future<void> mainCommon(String env) async {
   WidgetsFlutterBinding.ensureInitialized();
   await ConfigReader.initialize();
-  Color? primaryColor;
+  Color primaryColor = Colors.yellow;
   switch (env) {
     case Environment.dev:
       primaryColor = Colors.blue;
@@ -16,5 +16,10 @@ Future<void> mainCommon(String env) async {
       primaryColor = Colors.red;
       break;
   }
-  runApp(Provider.value(value: primaryColor, child: MyApp()));
+  //runApp(Provider.value(value: primaryColor, child: const MyApp()));
+
+  runApp(MultiProvider(
+    providers: [Provider<Color>(create: (_) => primaryColor)],
+    child: const MyApp(),
+  ));
 }

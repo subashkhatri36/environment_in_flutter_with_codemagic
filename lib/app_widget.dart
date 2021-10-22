@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import './config_reader.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter CI iwth Codemagic',
+      title: 'Flutter CI with Codemagic',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Provider.of<Color>(context),
       ),
-      home: const MyHomePage(title: 'Flutter CI with codemagic'),
+      home: const MyHomePage(title: 'Flutter CI with Codemagic'),
     );
   }
 }
@@ -26,7 +24,7 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -34,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      _counter++;
+      _counter += ConfigReader.getIncrementAmount();
     });
   }
 
@@ -48,12 +46,16 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
+            Text(
               'You have pushed the button this many times:',
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            Text(
+              'Revealed secret:\n${ConfigReader.getSecretKey()}',
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -61,8 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
